@@ -7,6 +7,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 import os
@@ -31,6 +32,7 @@ def meesho(no):
     login=WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.CSS_SELECTOR,"button[type='submit']")))
     login.click()
     time.sleep(2)
+    driver.close()
 
 def rummycircle(no):
     driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -43,6 +45,7 @@ def rummycircle(no):
     login=WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.CSS_SELECTOR,"div[id='getStarted']")))
     login.click()
     time.sleep(2)
+    driver.close()
 
 def urbanic(no):
     #driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -84,18 +87,74 @@ def ullu(no):
     time.sleep(2)
     login=WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.CSS_SELECTOR,"button[type='button']")))
     login.click()
-    time.sleep(5)
+    time.sleep(2)
     driver.close()
 
+def fancode(no):
+    driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver.get("https://www.fancode.com/")
+    icon=WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.CSS_SELECTOR,"path[fill-rule='evenodd']")))
+    icon.click()
+    time.sleep(1)
+    phone_no=WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.CSS_SELECTOR,"input[placeholder='Enter Mobile Number']")))
+    phone_no.send_keys(no)
+    login=WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.CSS_SELECTOR,"svg[data-e2e='login__otpButton']")))
+    login.click()
+    time.sleep(2)
+    driver.close()
+
+def housing(no):
+    driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver.get("https://housing.com/")
+    icon=WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.CSS_SELECTOR,"img[src='//c.housingcdn.com/demand/s/client/common/assets/tenant-avatar.cedc2f44.png']")))
+    icon.click()
+    time.sleep(1)
+    login_button=WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"//*[@id='innerApp']/div[2]/div/div[2]/div[1]/div[1]/button")))
+    #print(phone_no)
+    login_button.click()
+    time.sleep(1)
+    phone_number=WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.CSS_SELECTOR,"input[type='tel']")))
+    phone_number.send_keys(no)
+    continue_button=WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"//*[@id='modal-root']/div/div[2]/div[2]/div[2]/form/button")))
+    continue_button.click()
+    time.sleep(3)
+    driver.close()
+
+ls=[1,2,3,4,5,6]
+u_count=0
+m_count=0
+ul_count=0
+h_count=0
 
 for i in range(15):
-    res=random.choice([1,2,3,4])
+    res=random.choice(ls)
     if(res==1):
-        meesho(no)
+        if(m_count!=5):
+            m_count+=1
+            meesho(no)
+        elif(m_count==5):
+            ls.remove(1)
+            i-=1
     elif(res==2):
         rummycircle(no)
     elif(res==3):
-        urbanic(no)
+        if(u_count!=4):
+            urbanic(no)
+            u_count+=1
+        elif(u_count==4):
+            ls.remove(3)
+            i-=1
     elif(res==4):
-        ullu(no)
+        if(ul_count!=5):
+            ul_count+=1
+            ullu(no)
+        elif(ul_count==5):
+            ls.remove(4)
+            i-=1
+    elif(res==5):
+        fancode(no)
+    elif(res==6):
+        housing(no)
+
+
 
